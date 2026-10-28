@@ -3,6 +3,7 @@ export const TERM_START = '2026-08-31'
 export const TOTAL_WEEKS = 20
 export const TERM_END = '2027-01-17'
 export const DAYS = ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+export const HOLIDAYS = ['元旦', '春节', '清明节', '劳动节', '端午节', '中秋节', '国庆节'] as const
 export const PERIODS = [
   ['08:00', '08:45'], ['08:55', '09:40'], ['10:00', '10:45'], ['10:55', '11:40'],
   ['14:00', '14:45'], ['14:55', '15:40'], ['16:00', '16:45'], ['16:55', '17:40'],
@@ -89,7 +90,17 @@ export function restoreHoliday(state: State, date: string, scope: 'day' | 'event
   const dates = (scope === 'day' ? [date] : holiday.dates).filter(inTerm)
   return { ...state, restored: [...new Set([...state.restored, ...dates])] }
 }
-export const resumeHoliday = (state: State, date: string): State => ({ ...state, restored: state.restored.filter(value => value !== date) })
+// Use the largest free run, nearest the day's centre when runs tie. Never cover a course.
+export function makeupEntrySlot(courses: Pick<Course, 'start' | 'end'>[]): [number, number] | null {
+  const gaps: [number, number][] = []
+  let start = 0
+  for (let period = 1; period <= PERIODS.length + 1; period++) {
+    const free = period <= PERIODS.length && !courses.some(course => period >= course.start && period <= course.end)
+    if (free && !start) start = period
+    if (!free && start) { gaps.push([start, period - 1]); start = 0 }
+  }
+  return gaps.sort((a, b) => (b[1] - b[0]) - (a[1] - a[0]) || Math.abs(a[0] + a[1] - 9) - Math.abs(b[0] + b[1] - 9))[0] ?? null
+}
 export function sourceError(target: string, source: string, state: State): string {
   if (!source) return '请选择要补哪天的课。'
   if (!validDate(source)) return '请输入有效日期，如 2026-10-06。'

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { baseCourses, initialState, resolveDay, restoreHoliday, resumeHoliday, saveMakeup, removeMakeup, sourceForWeekday, sourceError, validDate, visibleDays, weekOf } from './model'
+import { baseCourses, initialState, makeupEntrySlot, resolveDay, restoreHoliday, saveMakeup, removeMakeup, sourceForWeekday, sourceError, validDate, visibleDays, weekOf } from './model'
 
 const enabled = () => ({ ...initialState(), enabled: true })
 describe('holiday and makeup decisions', () => {
@@ -10,11 +10,11 @@ describe('holiday and makeup decisions', () => {
     expect(resolveDay('2026-10-10', saved).status).toBe('makeup')
     expect(saved.makeups['2026-10-10'].sourceDate).toBe('2026-10-06')
   })
-  it('restores only the chosen day and can put it back on holiday', () => {
+  it('restores only the chosen day without changing the rest of the holiday', () => {
     const restored = restoreHoliday(enabled(), '2026-10-02', 'day')
     expect(resolveDay('2026-10-02', restored).status).toBe('restored')
     expect(resolveDay('2026-10-01', restored).courses).toHaveLength(0)
-    expect(resolveDay('2026-10-02', resumeHoliday(restored, '2026-10-02')).status).toBe('holiday')
+    expect(resolveDay('2026-10-02', restored).courses).toHaveLength(2)
   })
   it('restores exact holiday event membership across weeks, not makeup dates or other years', () => {
     const events = [
@@ -88,5 +88,11 @@ describe('holiday and makeup decisions', () => {
       expect(() => saveMakeup(enabled(), '2026-10-10', source, 'date')).toThrow()
     }
     expect(validDate('2026-02-30')).toBe(false)
+  })
+  it('places the makeup entry in the central available area without covering courses', () => {
+    expect(makeupEntrySlot([])).toEqual([1, 8])
+    expect(makeupEntrySlot([{ start: 7, end: 8 }])).toEqual([1, 6])
+    expect(makeupEntrySlot([{ start: 1, end: 2 }, { start: 7, end: 8 }])).toEqual([3, 6])
+    expect(makeupEntrySlot([{ start: 1, end: 8 }])).toBeNull()
   })
 })
