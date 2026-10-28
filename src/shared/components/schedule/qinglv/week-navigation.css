@@ -1,0 +1,293 @@
+/* 周次导航与门户浮层；保留选中、禁用和键盘聚焦状态。 */
+:where(.qinglv) .weekSpectrum button:focus-visible, :where(.qinglv).weekSpectrum button:focus-visible {
+  outline: 2px solid var(--bamboo);
+  outline-offset: 3px;
+}
+:where(.qinglv) .weekSpectrumPopup .ant-popover-inner, :where(.qinglv).weekSpectrumPopup .ant-popover-inner {
+  background: var(--paper-warm);
+  border: 1px solid var(--schedule-week-popup-line);
+  padding: 17px 18px;
+  box-shadow: 0 6px 20px var(--schedule-week-popup-shadow);
+}
+:where(.qinglv) .weekSpectrum, :where(.qinglv).weekSpectrum {
+  width: 244px;
+  color: var(--ink);
+}
+:where(.qinglv) .spectrumHeading, :where(.qinglv).spectrumHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+:where(.qinglv) .spectrumHeading>span, :where(.qinglv).spectrumHeading>span {
+  font: 16px var(--serif);
+}
+:where(.qinglv) .spectrumHeading>small, :where(.qinglv).spectrumHeading>small {
+  font-size: var(--font-size-caption);
+  color: var(--schedule-week-popup-caption);
+}
+:where(.qinglv) .spectrumWeeks, :where(.qinglv).spectrumWeeks {
+  display: grid;
+  grid-template-columns: repeat(5,1fr);
+  gap: 7px;
+}
+:where(.qinglv) .spectrumWeeks>button, :where(.qinglv).spectrumWeeks>button {
+  height: 36px;
+  border: 1px solid var(--schedule-week-option-line);
+  border-radius: 4px;
+  background: transparent;
+  font: 12px var(--font-family-control);
+  color: var(--schedule-week-option-text);
+  position: relative;
+}
+:where(.qinglv) .spectrumWeeks>button:hover, :where(.qinglv).spectrumWeeks>button:hover {
+  background: var(--schedule-week-option-hover);
+  border-color: var(--schedule-week-option-hover-line);
+}
+:where(.qinglv) .spectrumWeeks>button[aria-pressed=true], :where(.qinglv).spectrumWeeks>button[aria-pressed=true] {
+  background: var(--schedule-week-option-selected);
+  color: var(--jade);
+  border-color: var(--schedule-week-option-selected-line);
+}
+:where(.qinglv) .spectrumWeeks>button[aria-pressed=true]:after, :where(.qinglv).spectrumWeeks>button[aria-pressed=true]:after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: calc(50% - 5px);
+  width: 10px;
+  height: 1px;
+  background: var(--bamboo);
+}
+:where(.qinglv) .spectrumFoot, :where(.qinglv).spectrumFoot {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  border-top: 1px solid var(--gold-line);
+  margin-top: 14px;
+  padding-top: 11px;
+  font-size: var(--font-size-tiny);
+  color: var(--schedule-week-popup-caption);
+}
+:where(.qinglv) .spectrumFoot button, :where(.qinglv).spectrumFoot button {
+  font-size: var(--font-size-caption);
+  color: var(--jade);
+  padding: 4px 0;
+}
+:where(.qinglv) .weekRuler.weekLeaf, :where(.qinglv).weekRuler.weekLeaf {
+  display: grid;
+  position: relative;
+  width: 166px;
+  height: 46px;
+  grid-template-columns: 32px 102px 32px;
+  grid-template-rows: 34px 12px;
+  align-items: center;
+}
+:where(.qinglv) .weekLeaf .leafArrow, :where(.qinglv).weekLeaf .leafArrow {
+  width: 32px;
+  height: 34px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--schedule-week-arrow);
+}
+:where(.qinglv) .leafArrow svg, :where(.qinglv).leafArrow svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1;
+  transition: transform .18s ease;
+}
+:where(.qinglv) .weekLeaf .leafArrow:hover:not(:disabled), :where(.qinglv).weekLeaf .leafArrow:hover:not(:disabled) {
+  background: transparent;
+  color: var(--jade);
+}
+:where(.qinglv) .leafArrow.previous:hover:not(:disabled) svg, :where(.qinglv).leafArrow.previous:hover:not(:disabled) svg {
+  transform: translateX(-1px);
+}
+:where(.qinglv) .leafArrow.next:hover:not(:disabled) svg, :where(.qinglv).leafArrow.next:hover:not(:disabled) svg {
+  transform: translateX(1px);
+}
+:where(.qinglv) .weekLeaf .leafArrow:disabled, :where(.qinglv).weekLeaf .leafArrow:disabled {
+  opacity: .25;
+  cursor: default;
+}
+:where(.qinglv) .weekLeaf .leafPage, :where(.qinglv).weekLeaf .leafPage {
+  height: 34px;
+  width: 102px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 5px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--jade);
+  position: relative;
+}
+:where(.qinglv) .leafPage:after, :where(.qinglv).leafPage:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 9px;
+  right: 9px;
+  height: 1px;
+  background: var(--schedule-week-leaf-rule);
+}
+:where(.qinglv) .weekLeaf .leafPage:hover, :where(.qinglv).weekLeaf .leafPage:hover, :where(.qinglv) .weekLeaf .leafPage[aria-expanded=true], :where(.qinglv).weekLeaf .leafPage[aria-expanded=true] {
+  color: var(--jade-dark);
+}
+:where(.qinglv) .leafPage:hover:after, :where(.qinglv).leafPage:hover:after, :where(.qinglv) .leafPage[aria-expanded=true]:after, :where(.qinglv).leafPage[aria-expanded=true]:after {
+  background: var(--bamboo);
+}
+@media (prefers-reduced-motion:reduce) {
+  :where(.qinglv) .leafArrow svg, :where(.qinglv).leafArrow svg {
+    transition: none;
+  }
+}
+:where(.qinglv) .weekLeaf .leafPage:hover, :where(.qinglv).weekLeaf .leafPage:hover, :where(.qinglv) .weekLeaf .leafPage[aria-expanded=true], :where(.qinglv).weekLeaf .leafPage[aria-expanded=true] {
+  background: var(--schedule-week-option-hover);
+}
+:where(.qinglv) .weekSpectrumPopup .ant-popover-inner, :where(.qinglv).weekSpectrumPopup .ant-popover-inner {
+  border-radius: 3px;
+  border-top: 3px double var(--schedule-week-leaf-hover-line);
+}
+:where(.qinglv) .weekRuler.weekReference, :where(.qinglv).weekRuler.weekReference {
+  width: 320px;
+  height: 58px;
+  display: grid;
+  grid-template-columns: 48px 32px 208px 32px;
+  grid-template-rows: 1fr;
+}
+:where(.qinglv) .weekLabel, :where(.qinglv).weekLabel {
+  font: italic 16px var(--serif);
+  color: var(--schedule-week-label);
+  letter-spacing: 2px;
+}
+:where(.qinglv) .weekReference .leafArrow, :where(.qinglv).weekReference .leafArrow {
+  height: 42px;
+  width: 32px;
+  color: var(--schedule-week-reference-arrow);
+}
+:where(.qinglv) .weekReference .leafArrow svg, :where(.qinglv).weekReference .leafArrow svg {
+  height: 22px;
+  width: 22px;
+  stroke-width: 1.6;
+}
+:where(.qinglv) .weekReference .leafPage, :where(.qinglv).weekReference .leafPage {
+  width: 208px;
+  height: 58px;
+  padding: 0;
+  background: transparent;
+}
+:where(.qinglv) .weekReference .leafPage:after, :where(.qinglv).weekReference .leafPage:after {
+  display: none;
+}
+:where(.qinglv) .weekSignature, :where(.qinglv).weekSignature {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+:where(.qinglv) .weekSignature>i, :where(.qinglv).weekSignature>i {
+  position: relative;
+  width: 56px;
+  height: 1px;
+  background: var(--schedule-week-progress-rule);
+  margin: 0 0 3px;
+}
+:where(.qinglv) .weekSignature>i:after, :where(.qinglv).weekSignature>i:after {
+  content: '';
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--schedule-week-progress-mark);
+  left: var(--week-progress, 0%);
+  transform: translateX(-50%);
+  top: -1.5px;
+}
+:where(.qinglv) .weekSignature strong, :where(.qinglv).weekSignature strong {
+  font: 600 21px/1.3 var(--serif);
+  color: var(--schedule-week-title);
+  letter-spacing: 1px;
+}
+:where(.qinglv) .weekSignature small, :where(.qinglv).weekSignature small {
+  font: 12px/1.3 var(--font-family-control);
+  color: var(--schedule-week-date);
+  letter-spacing: .5px;
+}
+:where(.qinglv) .weekReference .leafPage:hover, :where(.qinglv).weekReference .leafPage:hover {
+  background: transparent;
+}
+:where(.qinglv) .weekReference .leafPage:hover strong, :where(.qinglv).weekReference .leafPage:hover strong {
+  color: var(--jade);
+}
+:where(.qinglv) .weekReference .leafPage:hover .weekSignature>i, :where(.qinglv).weekReference .leafPage:hover .weekSignature>i {
+  background: var(--jade);
+}
+@media (max-width:760px) {
+  :where(.qinglv) .weekRuler.weekReference, :where(.qinglv).weekRuler.weekReference {
+    width: 260px;
+    grid-template-columns: 38px 28px 166px 28px;
+  }
+  :where(.qinglv) .weekReference .leafPage, :where(.qinglv).weekReference .leafPage {
+    width: 166px;
+  }
+  :where(.qinglv) .weekReference .leafArrow, :where(.qinglv).weekReference .leafArrow {
+    width: 28px;
+  }
+  :where(.qinglv) .weekSignature strong, :where(.qinglv).weekSignature strong {
+    font-size: 19px;
+  }
+  :where(.qinglv) .weekSignature small, :where(.qinglv).weekSignature small {
+    font-size: var(--font-size-note);
+  }
+}
+
+/* 课表和作业周览共用的操作按钮。 */
+
+:where(.qinglv) .sequenceTools .sequencePrimary, :where(.qinglv).sequenceTools .sequencePrimary {
+  width: 100px;
+  height: 34px;
+  box-shadow: none;
+  background: var(--jade);
+  border: 1px solid var(--jade);
+  color: var(--paper-warm);
+  position: relative;
+}
+:where(.qinglv) .sequencePrimary:after, :where(.qinglv).sequencePrimary:after {
+  content: '';
+  position: absolute;
+  border: 1px solid var(--schedule-grid-top-rule);
+  pointer-events: none;
+}
+:where(.qinglv) .sequenceTools .sequencePrimary:hover, :where(.qinglv).sequenceTools .sequencePrimary:hover {
+  background: var(--jade-dark);
+  border-color: var(--jade-dark);
+}
+:where(.qinglv) .sequenceTools button:focus-visible, :where(.qinglv).sequenceTools button:focus-visible {
+  outline: 2px solid var(--bamboo);
+  outline-offset: 3px;
+}
+@media (max-width:760px) and (min-width:601px) {
+  :where(.qinglv) .sequenceTools .sequencePrimary, :where(.qinglv).sequenceTools .sequencePrimary {
+    width: 94px;
+  }
+}
+:where(.qinglv) .sequenceTools .sequencePrimary, :where(.qinglv).sequenceTools .sequencePrimary {
+  border-radius: 1px;
+  font-family: var(--serif);
+  font-size: var(--font-size-body);
+  letter-spacing: 1px;
+}
+:where(.qinglv) .sequencePrimary:after, :where(.qinglv).sequencePrimary:after {
+  inset: 3px;
+  border-radius: 0;
+  border-color: var(--schedule-grid-edge);
+}

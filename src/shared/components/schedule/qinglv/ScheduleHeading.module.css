@@ -1,0 +1,38 @@
+.breadcrumb { display:flex; gap:20px; font-size: var(--font-size-caption); color:var(--schedule-heading-muted); padding:22px 0 6px; }
+.breadcrumb a { color:inherit; text-decoration:none; }
+.breadcrumb a:focus-visible { outline:2px solid var(--jade); outline-offset:4px; }
+.heading { height:200px; position:relative; isolation:isolate; }
+.voyageMap { position:absolute; width:100%; height:100%; inset:0; pointer-events:none; }
+.headerLandscape { mix-blend-mode:multiply; opacity:.88; mask-image:linear-gradient(90deg,transparent 0%,#000 13%,#000 88%,transparent 100%); }
+.copy { position:absolute; left:0; top:38px; z-index:1; max-width:44%; }
+.copy h1 { font:clamp(25px,2.65vw,38px)/1.45 var(--serif); letter-spacing:2px; margin:18px 0; color:var(--ink); }
+.copy p { font-size: var(--font-size-caption); color:var(--schedule-heading-meta); line-height:1.9; margin:0; white-space:nowrap; }
+.copy i { padding:0 9px; color:var(--schedule-heading-separator); font-style:normal; }
+.milestone { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+:global(html[data-theme="dark"]) .voyageMap { background:var(--schedule-paper); mask-image:linear-gradient(180deg,transparent,#000 18px,#000); }
+:global(html[data-theme="dark"]) .headerLandscape { mix-blend-mode:screen; filter:grayscale(1) invert(1) sepia(.3) hue-rotate(85deg) saturate(.6) brightness(.8); opacity:.55; }
+:global(html[data-theme="dark"]) .boatShape { filter:brightness(1.05) saturate(.65); opacity:.85; }
+@media(max-width:1100px) {
+  .copy { max-width:48%; }
+  .copy p { font-size: var(--font-size-tiny); }
+  .copy i { padding:0 4px; }
+}
+@media(max-width:760px) {
+  .breadcrumb { padding-top:16px; font-size: var(--font-size-tiny); gap:10px; }
+  .heading { height:220px; }
+  .copy { top:22px; max-width:100%; }
+  .copy h1 { font-size:25px; letter-spacing:0; margin:15px 0 12px; }
+  .copy p { white-space:normal; font-size: var(--font-size-micro); }
+  .voyageMap { top:116px; left:0; width:100%; height:104px; }
+  .boatShape { transform:scale(1.3); }
+  .routeLabel { display:none; }
+  .headerLandscape { opacity:.78; }
+  .milestone { display:flex; align-items:baseline; gap:8px; right:0; bottom:68px; width:auto; height:auto; margin:0; overflow:visible; clip-path:none; background:var(--schedule-heading-milestone-paper); padding:2px 5px; border-left:1px solid var(--schedule-heading-milestone-seal); color:var(--schedule-heading-milestone-caption); font:9px var(--serif); }
+  .milestone b { font:18px Georgia; color:var(--schedule-heading-milestone-number); }
+  .milestone small { font-size: var(--font-size-tiny); }
+}
+
+.returnToday { position:absolute; right:calc(62.667% + 12px); top:calc(82.273% - 12px); z-index:2; padding:4px 2px; border:0; background:transparent; color:var(--schedule-heading-muted); font:10px/16px var(--serif); letter-spacing:1px; white-space:nowrap; cursor:pointer; opacity:.7; }
+.returnToday:hover { opacity:1; color:var(--jade); }
+.returnToday:focus-visible { opacity:1; outline:1px solid var(--jade); outline-offset:3px; }
+@media(max-width:760px) { .returnToday { left:0; right:auto; top:182px; } .voyageMap { left:64px; width:calc(100% - 64px); } }

@@ -1,0 +1,12 @@
+.folio {
+  --folio-focus: var(--color-focus-folio);
+}
+.folio :is(button,summary):focus-visible {
+  outline: 2px solid var(--folio-focus);
+  outline-offset: 3px;
+}
+@media (prefers-reduced-motion:reduce) {
+  .folio * {
+    transition: none !important;
+  }
+}

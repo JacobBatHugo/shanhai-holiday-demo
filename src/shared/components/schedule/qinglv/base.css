@@ -1,0 +1,89 @@
+.qinglv {
+  --selection-ink: var(--schedule-ink);
+  --selection-paper: var(--schedule-soft);
+  --paper: var(--schedule-paper);
+  --paper-warm: var(--schedule-surface);
+  --ink: var(--schedule-ink);
+  --ink-muted: var(--schedule-muted);
+  --jade: var(--schedule-accent);
+  --jade-dark: var(--schedule-accent-strong);
+  --bamboo: var(--schedule-bamboo);
+  --gold-line: var(--schedule-decorative-line);
+  --grid-line: var(--schedule-grid-line);
+  --cinnabar: var(--schedule-error);
+  --serif: var(--schedule-font-heading);
+  --color-primary: var(--jade);
+  --color-primary-hover: var(--jade-dark);
+  --color-text: var(--ink);
+  --color-border: var(--gold-line);
+  --color-focus-ring: var(--schedule-focus-ring);
+  --shadow-control: none;
+}
+:where(.qinglv) *,:where(.qinglv):is(*) {
+  box-sizing: border-box;
+}
+.qinglv {
+  color: var(--ink);
+  font: 13px/1.6 var(--schedule-font-body);
+}
+:where(.qinglv) button,:where(.qinglv):is(button),:where(.qinglv) input,:where(.qinglv):is(input) {
+  font: inherit;
+}
+:where(.qinglv) button,:where(.qinglv):is(button) {
+  cursor: pointer;
+  color: inherit;
+  background: none;
+  border: 0;
+}
+:where(.qinglv) button,:where(.qinglv):is(button),:where(.qinglv) a,:where(.qinglv):is(a),:where(.qinglv) input,:where(.qinglv):is(input) {
+  touch-action: manipulation;
+}
+:where(.qinglv) button:focus-visible,:where(.qinglv):is(button:focus-visible),:where(.qinglv) a:focus-visible,:where(.qinglv):is(a:focus-visible),:where(.qinglv) input:focus-visible,:where(.qinglv):is(input:focus-visible) {
+  outline: 2px solid var(--jade);
+  outline-offset: 3px;
+}
+:where(.qinglv) button:disabled,:where(.qinglv):is(button:disabled) {
+  cursor: default;
+  opacity: .4;
+}
+:where(.qinglv) a,:where(.qinglv):is(a) {
+  color: inherit;
+  text-decoration: none;
+}
+:where(.qinglv) h1,:where(.qinglv):is(h1),:where(.qinglv) h2,:where(.qinglv):is(h2),:where(.qinglv) h3,:where(.qinglv):is(h3),:where(.qinglv) p,:where(.qinglv):is(p) {
+  margin-top: 0;
+}
+:where(.qinglv) h3,:where(.qinglv):is(h3) {
+  font: 18px var(--serif);
+  margin-top: 28px;
+  margin-bottom: 18px;
+}
+:where(.qinglv) h3 small,:where(.qinglv):is(h3 small) {
+  font: 12px var(--font-family-control);
+  color: var(--ink-muted);
+  float: right;
+}
+:where(.qinglv) button,:where(.qinglv):is(button) {
+  transition: background .18s,border-color .18s,color .18s;
+}
+:where(.qinglv) button:hover:not(:disabled),:where(.qinglv):is(button:hover:not(:disabled)) {
+  background-color: var(--schedule-button-hover);
+}
+:where(.qinglv) i,:where(.qinglv):is(i) {
+  font-style: normal;
+}
+@media (prefers-reduced-motion:reduce) {
+  :where(.qinglv) *,:where(.qinglv):is(*),:where(.qinglv) *:before,:where(.qinglv):is(*:before),:where(.qinglv) *:after,:where(.qinglv):is(*:after) {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+.qinglv {
+  --color-bg-soft: var(--paper-warm);
+  --color-bg-inset: var(--paper);
+  --color-mask: var(--schedule-mask);
+}
+.qinglv {
+  -webkit-font-smoothing: auto;
+}

@@ -1,0 +1,74 @@
+.scholar-popup {
+  --sheet: var(--folio-paper);
+  --sheet-ink: var(--folio-ink);
+  --sheet-line: var(--folio-rule);
+  --sheet-control: var(--folio-popup-selected);
+  background: var(--sheet) !important;
+  color: var(--sheet-ink);
+  border: 1px solid var(--sheet-line);
+  border-radius: 2px !important;
+  box-shadow: 0 4px 12px var(--folio-popup-shadow) !important;
+}
+.scholar-popup .ant-picker-panel-container {
+  background: var(--sheet) !important;
+  border-radius: 0;
+  box-shadow: none !important;
+}
+.scholar-popup .ant-picker-cell-inner {
+  border-radius: 1px !important;
+}
+.scholar-popup .ant-picker-cell-selected .ant-picker-cell-inner {
+  background: var(--sheet-control) !important;
+  color: var(--sheet-ink) !important;
+  box-shadow: inset 0 -2px var(--folio-selected-mark);
+}
+.scholar-popup .ant-picker-header {
+  font-family: var(--serif);
+}
+@media (prefers-reduced-motion:reduce) {
+  .scholar-popup,.scholar-popup * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+.scholar-popup .ant-picker-panel,.scholar-popup .ant-picker-date-panel,.scholar-popup .ant-picker-month-panel,.scholar-popup .ant-picker-year-panel,.scholar-popup .ant-picker-decade-panel {
+  width: 280px;
+}
+.scholar-popup .ant-picker-content {
+  width: 100%;
+  table-layout: fixed;
+}
+.scholar-popup .ant-picker-content th,.scholar-popup .ant-picker-content td {
+  padding: 2px !important;
+  height: 32px !important;
+}
+.scholar-popup .ant-picker-cell-inner {
+  min-width: 26px !important;
+  height: 26px !important;
+  line-height: 26px !important;
+  font-size: var(--font-size-body);
+}
+.scholar-popup .ant-picker-header {
+  height: 42px;
+  line-height: 40px;
+}
+.scholar-popup .ant-picker-body {
+  padding: 8px !important;
+}
+.scholar-popup .ant-picker-today-btn {
+  color: var(--sheet-ink) !important;
+}
+.scholar-popup .ant-picker-footer {
+  line-height: 36px;
+}
+.ant-picker-dropdown.scholar-popup {
+  width: 282px !important;
+  min-width: 0 !important;
+  max-width: calc(100vw - 16px);
+}
+.ant-picker-dropdown.scholar-popup .ant-picker-panel-container {
+  width: 280px !important;
+}
+.ant-picker-dropdown.scholar-popup .ant-picker-today-btn {
+  color: var(--sheet-ink) !important;
+}

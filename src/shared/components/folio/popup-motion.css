@@ -1,0 +1,7 @@
+.ant-select-dropdown:is(.scholar-popup,.folio-popup),
+.ant-picker-dropdown.scholar-popup {
+  animation:none!important;transition:none!important;
+}
+.paper-popup-content { animation:paper-popup-ink 110ms ease-out; }
+@keyframes paper-popup-ink { from {opacity:.65} to {opacity:1} }
+@media(prefers-reduced-motion:reduce){.paper-popup-content{animation:none!important}}
