@@ -1,6 +1,6 @@
 {
   "demo": "shanhai-holiday-demo",
-  "version": "2026-10-30.5",
+  "version": "2026-10-30.6",
   "data": "fictional",
-  "feature": "simplified-forms-and-conditional-preview"
+  "feature": "local-review-mode-and-copy-export"
 }

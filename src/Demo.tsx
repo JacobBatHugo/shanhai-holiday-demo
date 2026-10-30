@@ -12,6 +12,7 @@ import MakeupSheet, { CourseList } from './MakeupSheet'
 import HolidayCard, { HolidayFace } from './HolidayCard'
 import useDialogViewport from './useDialogViewport'
 import Feedback from './Feedback'
+import ReviewMode from './ReviewMode'
 import type { Notice } from './Feedback'
 import { DAYS, HOLIDAYS, PERIODS, TOTAL_WEEKS, fullDate, holidayAt, initialState, makeupEntrySlot, removeMakeup, resolveDay, restoreHoliday, saveMakeup, shortDate, visibleDays, weekDates } from './model'
 import type { Course, State } from './model'
@@ -82,7 +83,7 @@ export default function Demo() {
   return <ConfigProvider locale={zhCN} theme={dark ? nightAntdTheme(theme) : theme}>
     <div className="qinglv hd-app">
       <header className="hd-nav"><a href="#hd-main" className="hd-brand"><svg viewBox="0 0 32 24" aria-hidden="true"><path d="M2 21 11 5l6 10 5-7 8 13H2ZM9 8l3 3 2-1M21 4l2-2" /></svg>山海课表</a><div><span className="hd-demo-label">交互预览</span><button className="hd-theme" aria-label={dark ? '切换日间模式' : '切换夜间模式'} onClick={() => { document.documentElement.dataset.theme = dark ? 'light' : 'dark'; setDark(!dark) }}>{dark ? '日间' : '夜间'}</button></div></header>
-      <div className="hd-demo-tools"><label htmlFor="hd-scene">预览场景</label><select id="hd-scene" value={scene} onChange={event => chooseScene(event.target.value as Scene)}>{SCENES.map(([value, label]) => <option value={value} key={value}>{label}</option>)}</select><button onClick={() => setGallery(true)}>节日卡片</button><button onClick={() => chooseScene(scene)}>重置示例</button><span>虚构课表 · 刷新重置</span></div>
+      <div className="hd-demo-tools"><label htmlFor="hd-scene">预览场景</label><select id="hd-scene" value={scene} onChange={event => chooseScene(event.target.value as Scene)}>{SCENES.map(([value, label]) => <option value={value} key={value}>{label}</option>)}</select><button onClick={() => setGallery(true)}>节日卡片</button><button onClick={() => chooseScene(scene)}>重置示例</button><ReviewMode context={`${SCENES.find(([value]) => value === scene)![1]}；第 ${week} 周；${dark ? '夜间' : '日间'}；自动调整${state.enabled ? '开启' : '关闭'}`} /><span>虚构课表 · 刷新重置</span></div>
       <main id="hd-main" className="hd-main">
         <div className={headingStyles.breadcrumb}><span>我的课表</span><span>/</span><span>学期课表</span></div>
         <section className={headingStyles.heading} aria-label="学期信息"><VoyageLandscape week={week} total={TOTAL_WEEKS} currentWeek={5} /><div className={headingStyles.copy}><h1>大学 · 大三 · 上学期</h1><p>2026—2027 学年<i>·</i>20 周<i>·</i>开始 08/31</p></div><span className={headingStyles.milestone}>航程<b>{String(week).padStart(2, '0')}</b><small>/ 20 周</small></span></section>

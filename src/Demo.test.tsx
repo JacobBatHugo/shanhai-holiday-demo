@@ -12,6 +12,23 @@ afterEach(() => { cleanup(); vi.useRealTimers() })
 const renderDemo = () => render(<ConfigProvider theme={{ token: { motion: false } }}><Demo /></ConfigProvider>)
 
 describe('revised holiday preview', () => {
+  it('annotates inside settings without toggling or closing the form, then resumes normal interaction', async () => {
+    renderDemo()
+    fireEvent.click(screen.getByRole('button', { name: '验收模式' }))
+    fireEvent.click(screen.getByRole('button', { name: '课表设置' }))
+    fireEvent.click(screen.getByRole('button', { name: '选取元素' }))
+    fireEvent.click(screen.getByRole('checkbox', { name: '按节假日自动调整' }))
+    fireEvent.change(screen.getByLabelText('你的原话'), { target: { value: '开关测试' } })
+    fireEvent.click(screen.getByRole('button', { name: '保存批注' }))
+    await waitFor(() => expect(screen.queryByLabelText('你的原话')).toBeNull())
+    expect(screen.getByRole('checkbox')).toHaveProperty('checked', false)
+    expect(screen.getByRole('dialog', { name: '课表设置' })).toBeTruthy()
+    fireEvent.click(screen.getByRole('button', { name: '退出验收' }))
+    fireEvent.click(screen.getByRole('checkbox'))
+    expect(screen.getByRole('checkbox')).toHaveProperty('checked', true)
+    fireEvent.click(screen.getByRole('button', { name: '关闭' }))
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
+  })
   it('drops a closed makeup draft and keeps the last saved source when reopened', async () => {
     renderDemo()
     fireEvent.change(screen.getByLabelText('预览场景'), { target: { value: 'makeup' } })

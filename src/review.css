@@ -1,0 +1,35 @@
+/* Local-only review chrome; no production layout or tokens are changed. */
+.hd-review-bar { position: fixed; z-index: 2500; right: max(12px, env(safe-area-inset-right)); bottom: max(12px, env(safe-area-inset-bottom)); width: 330px; max-width: calc(100vw - 24px); padding: 6px 12px; color: var(--color-text); background: var(--color-bg-elevated); border: 1px solid var(--color-border-control); border-radius: 3px; box-shadow: var(--shadow-popup); }
+.hd-review-bar[data-top="true"] { bottom: auto; top: max(8px, env(safe-area-inset-top)); }
+.hd-review-bar-heading, .hd-review-actions { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.hd-review-bar-heading { font-size: 12px; color: var(--color-text-muted); }
+.hd-review-bar button, .hd-review-list button { min-height: 44px; min-width: 44px; padding: 6px 8px; border: 0; color: var(--color-primary); background: transparent; font: inherit; cursor: pointer; }
+.hd-review-actions { border-top: 1px solid var(--color-border-decorative); font-size: 14px; }
+.hd-review-actions button[aria-pressed="true"] { background: var(--color-bg-selected); outline: 1px solid var(--color-primary); outline-offset: -1px; }
+.hd-review-bar button:hover, .hd-review-list button:hover { background: var(--color-bg-hover); }
+.hd-review-bar button:focus-visible, .hd-review-list button:focus-visible { outline: 2px solid var(--color-primary); outline-offset: -2px; }
+html[data-review-selecting] body *:not([data-review-ui], [data-review-ui] *) { cursor: crosshair !important; }
+[data-review-highlight] { outline: 2px solid var(--color-primary) !important; outline-offset: -2px !important; }
+.hd-review-dialog .ant-modal-content { padding: 24px; border: 1px solid var(--color-border); border-radius: 3px; background: var(--color-bg-surface); box-shadow: var(--shadow-popup); }
+.hd-review-dialog .ant-modal-header { background: transparent; padding-right: 36px; }
+.hd-review-dialog .ant-modal-title { font: 23px/1.5 var(--font-family-heading); color: var(--color-text); }
+.hd-review-dialog .ant-modal-close { width: 44px; height: 44px; top: 12px; right: 12px; }
+.hd-review-dialog .ant-modal-body { max-height: calc(var(--hd-visible-height, 100dvh) - 210px); overflow-y: auto; overscroll-behavior: contain; }
+.hd-review-dialog .ant-btn { min-height: 44px; border-radius: 2px; }
+.hd-review-content { padding-top: 8px; font-size: 14px; line-height: 1.7; }
+.hd-review-content label { display: block; margin-bottom: 8px; }
+.hd-review-content textarea { display: block; width: 100%; resize: vertical; min-height: 96px; padding: 12px; border: 1px solid var(--color-border-control); border-radius: 2px; background: var(--color-bg-surface); color: var(--color-text); font: 16px/1.65 var(--font-family-body); }
+.hd-review-content textarea:focus { outline: 2px solid var(--color-primary); outline-offset: -1px; }
+.hd-review-target { margin: 0 0 16px; padding-left: 12px; border-left: 2px solid var(--color-primary); overflow-wrap: anywhere; }
+.hd-review-help, .hd-review-privacy { color: var(--color-text-muted); font-size: 12px; }
+.hd-review-privacy { margin-bottom: 0; padding-top: 10px; border-top: 1px solid var(--color-border-decorative); }
+.hd-review-list { padding: 0; list-style: none; }
+.hd-review-list li { padding: 12px 0; border-bottom: 1px solid var(--color-border-decorative); overflow-wrap: anywhere; }
+.hd-review-list strong { font-weight: 500; }
+.hd-review-list p { white-space: pre-wrap; margin: 8px 0; }
+.hd-review-list li > div { display: flex; gap: 8px; }
+@media (max-width: 600px) {
+  .hd-demo-tools { flex-wrap: wrap; gap: 4px 12px; }
+  .hd-review-dialog .ant-modal { max-width: calc(100vw - 32px); margin: 0 auto; }
+  .hd-review-dialog .ant-modal-content { padding: 20px; }
+}
