@@ -101,13 +101,9 @@ button.hd-holiday:hover { border-color: color-mix(in srgb, var(--holiday-ink) 48
 .hd-settings .ant-modal-content { border-radius: 3px; background: var(--color-bg-surface); border: 1px solid var(--color-border); }
 .hd-settings .ant-modal-footer { margin: 0; padding: 20px 38px 28px; border-top: 1px solid var(--color-border-decorative); }
 .hd-settings .ant-btn { min-height: 44px; border-radius: 2px; min-width: 88px; }
-.hd-term-summary { display: flex; flex-direction: column; gap: 9px; font-size: 13px; color: var(--color-text-muted); padding: 0 0 25px; }
-.hd-term-summary span:first-child { font: 19px var(--font-family-heading); color: var(--color-text); }
-.hd-setting-option { border-top: 1px solid var(--color-border); padding: 25px 0; }
+.hd-setting-option { padding: 0; }
 .hd-setting-option .ant-checkbox-wrapper { min-height: 32px; align-items: center; font-size: 16px; }
 .hd-setting-option p { margin: 10px 0 7px 26px; font-size: 13px; color: var(--color-text-muted); line-height: 1.8; }
-.hd-setting-option small { display: block; margin-left: 26px; color: var(--color-text-muted); font-size: 12px; line-height: 1.8; }
-.hd-setting-meta { display: flex; flex-wrap: wrap; gap: 8px 20px; justify-content: space-between; border-top: 1px solid var(--color-border-decorative); padding-top: 18px; color: var(--color-text-muted); font-size: 11px; }
 
 /* A centred folio with stable geometry across source modes and preview states. */
 .hd-sheet.folio .ant-modal-content { position: relative; isolation: isolate; height: min(620px, calc(var(--hd-visible-height, 100dvh) - 32px)); background: var(--sheet); color: var(--sheet-ink); border: 1px solid var(--sheet-line); border-radius: 3px; overflow: hidden; box-shadow: var(--shadow-popup); }
@@ -156,7 +152,6 @@ button.hd-holiday:hover { border-color: color-mix(in srgb, var(--holiday-ink) 48
 .hd-preview { display: flex; flex-direction: column; flex: 1 0 140px; margin-top: 8px; padding-top: 14px; border-top: 1px solid var(--sheet-line); }
 .hd-preview > header { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding: 0 0 6px; color: var(--sheet-muted); font-size: 12px; line-height: 1.7; }
 .hd-preview header small { font-size: 11px; }
-.hd-preview-empty { flex: 1; min-height: 90px; display: grid; place-items: center; margin: 0; padding: 12px; border-block: 1px solid var(--sheet-line); background: var(--sheet-control); color: var(--sheet-muted); font-size: 12px; line-height: 1.8; text-align: center; }
 .hd-course-list { padding: 0; margin: 0; list-style: none; }
 .hd-course-list li { display: flex; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--color-border-decorative); }
 .hd-course-time { flex: 0 0 49px; display: flex; flex-direction: column; gap: 3px; padding-right: 10px; border-right: 1px solid var(--color-border); color: var(--color-text-muted); }
@@ -177,9 +172,6 @@ button.hd-holiday:hover { border-color: color-mix(in srgb, var(--holiday-ink) 48
 .hd-footer-actions .ant-btn-primary { min-width: 136px; }
 .hd-text-action { min-height: 44px; background: transparent; border: 0; color: var(--sheet-muted); padding: 0; font-size: 13px !important; }
 .hd-text-action:hover { color: var(--color-error); }
-.hd-discard p { margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: var(--color-text); }
-.hd-discard > div { display: flex; justify-content: flex-end; gap: 12px; }
-.hd-discard .ant-btn { min-height: 44px; border-radius: 2px; }
 
 /* All dialogs stay centred; operation-result feedback sits in the upper screen. */
 .hd-dialog.hd-dialog .ant-modal-wrap { display: flex; align-items: center; justify-content: center; top: var(--hd-visible-top, 0px); bottom: auto; height: var(--hd-visible-height, 100dvh); padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left)); overflow: hidden; }
@@ -234,7 +226,6 @@ button.hd-holiday:hover { border-color: color-mix(in srgb, var(--holiday-ink) 48
   .hd-settings .ant-modal-body { padding: 0 22px 24px !important; }
   .hd-settings .ant-modal-footer { padding: 18px 22px 22px; }
   .hd-setting-option .ant-checkbox-wrapper { font-size: 15px; }
-  .hd-setting-meta { font-size: 10px; }
   .hd-sheet.folio .ant-modal-content { height: min(640px, calc(var(--hd-visible-height, 100dvh) - 32px)); }
   .hd-sheet.folio .ant-modal-header { padding: 20px 20px 14px !important; }
   .hd-sheet.folio .ant-modal-body { padding: 0 20px 14px !important; }
@@ -247,7 +238,6 @@ button.hd-holiday:hover { border-color: color-mix(in srgb, var(--holiday-ink) 48
   .hd-weekdays { grid-template-columns: repeat(4, 1fr); gap: 6px; }
   .hd-source-controls { height: 130px; }
   .hd-preview { flex-basis: 120px; }
-  .hd-preview-empty { min-height: 70px; }
   .hd-weekdays button { font-size: 13px; }
   .hd-holiday-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
   .hd-holiday-gallery .hd-holiday { height: 266px; }

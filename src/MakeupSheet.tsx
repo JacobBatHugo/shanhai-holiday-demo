@@ -52,8 +52,6 @@ export default function MakeupSheet({ date, state, open, onSave, onRemove, onClo
   const [weekday, setWeekday] = useState(existing?.mode === 'weekday' ? weekdayOf(existing.sourceDate) : 0)
   const [attempted, setAttempted] = useState(false)
   const [confirmReplace, setConfirmReplace] = useState(false)
-  const [discard, setDiscard] = useState(false)
-  const [touched, setTouched] = useState(false)
   const warning = useRef<HTMLDivElement>(null)
   const heading = useRef<HTMLDivElement>(null)
   const sourceDate = mode === 'date' ? source : weekday ? sourceForWeekday(date, weekday) : ''
@@ -61,12 +59,10 @@ export default function MakeupSheet({ date, state, open, onSave, onRemove, onClo
   const courses = error ? [] : baseCourses(sourceDate, state)
   const current = resolveDay(date, state).courses
   const changed = sourceDate !== existing?.sourceDate || mode !== existing?.mode
-  const dirty = touched && (!existing || changed)
   const needsReplace = current.length > 0 && sourceDate !== existing?.sourceDate
   const showError = !!error && (attempted || !!sourceDate)
   useEffect(() => { if (confirmReplace) warning.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' }) }, [confirmReplace])
-  function edit() { setTouched(true); setConfirmReplace(false); setAttempted(false); setDiscard(false) }
-  function close() { if (dirty) setDiscard(true); else onClose() }
+  function edit() { setConfirmReplace(false); setAttempted(false) }
   function save() {
     setAttempted(true)
     if (error) return
@@ -76,11 +72,11 @@ export default function MakeupSheet({ date, state, open, onSave, onRemove, onClo
   return <Modal open={open} width={480} centered rootClassName="qinglv folio hd-dialog hd-form-dialog hd-sheet" destroyOnHidden
     transitionName="" maskTransitionName="" closable={{ 'aria-label': '关闭' }} focusTriggerAfterClose={false}
     title={<div ref={heading} tabIndex={-1} className="hd-sheet-title"><span className="hd-sheet-eyebrow">调 休 笺</span><h2>{existing ? '修改补课' : '设置补课'}</h2><CamelliaSprig /></div>}
-    onCancel={close} afterClose={afterClose} afterOpenChange={visible => { if (visible) heading.current?.focus() }}
-    footer={<div className="hd-sheet-footer">{discard ? <div className="hd-discard" role="alert"><p>还有未保存的选择，是否放弃？</p><div><Button onClick={() => { setDiscard(false); heading.current?.focus() }}>继续编辑</Button><Button danger onClick={onClose}>放弃修改</Button></div></div> : <>
+    onCancel={onClose} afterClose={afterClose} afterOpenChange={visible => { if (visible) heading.current?.focus() }}
+    footer={<div className="hd-sheet-footer">
       <div className="hd-save-summary">{confirmReplace ? '确认替换当天课程' : existing && !changed ? '已保存' : courses.length ? `${courses.length} 个时段` : '尚未选择来源'}</div>
-      <div className="hd-footer-actions">{existing ? <button className="hd-text-action" onClick={onRemove}>撤销补课</button> : <Button onClick={close}>取消</Button>}<Button type="primary" onClick={save} disabled={!!existing && !changed}>{confirmReplace ? '确认替换' : '保存补课'}</Button></div>
-    </>}</div>}>
+      <div className="hd-footer-actions">{existing ? <button className="hd-text-action" onClick={onRemove}>撤销补课</button> : <Button onClick={onClose}>取消</Button>}<Button type="primary" onClick={save} disabled={!!existing && !changed}>{confirmReplace ? '确认替换' : '保存补课'}</Button></div>
+    </div>}>
     <div className="hd-target-summary"><span>补课日期</span><strong>{shortDate(date)}<small>{DAYS[weekdayOf(date) - 1]} · 第 {weekOf(date)} 周</small></strong></div>
     <section className="hd-source-section"><div className="hd-section-title"><h3>补哪天的课</h3></div>
       <div className="hd-segment" role="group" aria-label="补课来源方式">
@@ -92,9 +88,9 @@ export default function MakeupSheet({ date, state, open, onSave, onRemove, onClo
           onClick={() => { edit(); setWeekday(i + 1) }}>{name}</button>)}</div></> : <div className="hd-date-field"><label htmlFor="hd-source-date">来源日期 · 本学期内</label><SourcePicker source={source} invalid={showError} onChange={value => { if (source !== value) edit(); setSource(value) }} /></div>}</div>
       <div className="hd-source-message">{showError && <p className="hd-error" id="hd-source-error" role="alert">{error}</p>}</div>
     </section>
-    <section className="hd-preview" aria-label="补课预览"><div className="hd-section-title"><h3>课程预览</h3><span>{courses.length ? `${courses.length} 个时段` : '待选择'}</span></div>{courses.length > 0 ? <><header><span>{fullDate(sourceDate)}</span><small>第 {weekOf(sourceDate)} 周</small></header><CourseList courses={courses} />
+    {!error && <section className="hd-preview" aria-label="补课预览"><div className="hd-section-title"><h3>课程预览</h3><span>{courses.length} 个时段</span></div><header><span>{fullDate(sourceDate)}</span><small>第 {weekOf(sourceDate)} 周</small></header><CourseList courses={courses} />
       <p className="hd-field-note">读取原排课，随来源更新。</p>
-    </> : <p className="hd-preview-empty">{showError ? '请选择有效来源' : '选择来源后预览课程'}</p>}</section>
+    </section>}
     {confirmReplace && <div className="hd-replace" role="alert" ref={warning}><strong>将替换当天 {current.length} 个课程时段</strong><p>{current.map(course => course.name).join('、')}</p><small>撤销补课可恢复原来的课程。</small></div>}
   </Modal>
 }

@@ -23,16 +23,11 @@ type Scene = typeof SCENES[number][0]
 
 function Settings({ enabled, onSave, onClose }: { enabled: boolean; onSave: (value: boolean) => void; onClose: () => void }) {
   const [checked, setChecked] = useState(enabled)
-  const [discard, setDiscard] = useState(false)
-  const close = () => checked !== enabled ? setDiscard(true) : onClose()
-  return <Modal open centered transitionName="" maskTransitionName="" width={560} onCancel={close} rootClassName="qinglv folio hd-dialog hd-form-dialog hd-settings"
-    title={<FolioHeading title="课表设置" />} footer={discard ? <div className="hd-discard" role="alert"><p>是否放弃这次设置修改？</p><Button onClick={() => setDiscard(false)}>继续编辑</Button><Button danger onClick={onClose}>放弃修改</Button></div> : <><Button onClick={close}>取消</Button><Button type="primary" onClick={() => onSave(checked)}>保存设置</Button></>}>
-    <div className="hd-term-summary"><span>大学 · 大三 · 上学期</span><span>2026.08.31 开始 · 共 20 周</span></div>
-    <section className="hd-setting-option"><Checkbox checked={checked} onChange={event => { setChecked(event.target.checked); setDiscard(false) }}>课表根据节假日自动调整</Checkbox>
-      <p>放假日自动停课，调休补哪天的课由你决定。</p>
-      <small>{checked ? '适用于本课表。节日安排以全国放假年历为准。' : '关闭后按原课表显示，已设置的调整会保留。'}</small>
+  return <Modal open centered transitionName="" maskTransitionName="" width={560} onCancel={onClose} closable={{ 'aria-label': '关闭' }} rootClassName="qinglv folio hd-dialog hd-form-dialog hd-settings"
+    title={<FolioHeading title="课表设置" />} footer={<><Button onClick={onClose}>取消</Button><Button type="primary" onClick={() => onSave(checked)}>保存设置</Button></>}>
+    <section className="hd-setting-option"><Checkbox checked={checked} onChange={event => setChecked(event.target.checked)}>按节假日自动调整</Checkbox>
+      <p>{checked ? '放假日自动停课，调休补课由你设置。' : '按原课表显示，已设置的调整会保留。'}</p>
     </section>
-    <div className="hd-setting-meta"><span>每份课表独立设置，默认关闭</span><span>示例年历 · 2026</span></div>
   </Modal>
 }
 
