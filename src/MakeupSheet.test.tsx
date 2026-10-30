@@ -50,6 +50,7 @@ describe('makeup sheet validation and commit boundaries', () => {
     expect(onClose).not.toHaveBeenCalled()
     fireEvent.click(screen.getByRole('button', { name: '继续编辑' }))
     expect(onClose).not.toHaveBeenCalled()
+    expect(document.activeElement).toBe(screen.getByRole('heading', { name: '设置补课' }).parentElement)
     fireEvent.click(screen.getByRole('button', { name: '关闭' }))
     fireEvent.click(screen.getByRole('button', { name: '放弃修改' }))
     expect(onClose).toHaveBeenCalledOnce()

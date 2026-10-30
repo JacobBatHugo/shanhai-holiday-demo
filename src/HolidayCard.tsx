@@ -36,8 +36,18 @@ function HolidayMotif({ name }: { name: string }) {
       <g className="hd-art-petal"><circle cx="79" cy="112" r="3" /><circle cx="85" cy="113" r="3" /><circle cx="82" cy="118" r="3" /></g>
     </>}
     {name === '国庆节' && <>
-      <circle className="hd-art-wash" cx="77" cy="54" r="23" /><path d="M31 91V29m0 3q16-10 33 0v27q-17-10-33 0m8-15 2-5 2 5 5 .5-4 3 1 5-4-3-4 3 1-5-4-3Z" />
-      <path className="hd-art-wash" d="m16 130 26-34 14 17 19-30 30 47Z" /><path d="m15 130 27-34 14 17 19-30 31 47M34 107l8 6 6-7m17-8 10 9 7-7M24 138h70M32 149h25m9 0h31M43 159h34" />
+      <circle className="hd-art-wash" cx="60" cy="73" r="43" />
+      <path d="m60 24 2.3 7.1h7.5l-6.1 4.4 2.3 7.1-6-4.4-6 4.4 2.3-7.1-6.1-4.4h7.5Z" />
+      <g fill="currentColor" stroke="none" opacity=".65">
+        <path d="m40 36 1.3 3.8h4l-3.3 2.4 1.3 3.8-3.3-2.4-3.3 2.4 1.3-3.8-3.3-2.4h4Z" />
+        <path d="m28 49 1 3h3.2l-2.6 1.9 1 3-2.6-1.9-2.6 1.9 1-3-2.6-1.9H27Z" />
+        <path d="m80 36 1.3 3.8h4l-3.3 2.4 1.3 3.8-3.3-2.4-3.3 2.4 1.3-3.8-3.3-2.4h4Z" />
+        <path d="m92 49 1 3h3.2l-2.6 1.9 1 3-2.6-1.9-2.6 1.9 1-3-2.6-1.9H91Z" />
+      </g>
+      <path className="hd-art-leaf" d="M23 106h74v29H23Z" />
+      <path d="M44 63h32m-31 1c-4 7-10 12-19 12l5 5h58l5-5c-9 0-15-5-19-12M36 82v12m48-12v12M32 92c-4 5-9 9-17 9l6 5h78l6-5c-8 0-13-4-17-9M23 107v28m74-28v28M20 135h80M15 141h90" />
+      <path d="M42 84v8m12-8v8m12-8v8m12-8v8M28 135v-11a4 4 0 0 1 8 0v11m6 0v-13a4 4 0 0 1 8 0v13m5 0v-15a5 5 0 0 1 10 0v15m5 0v-13a4 4 0 0 1 8 0v13m6 0v-11a4 4 0 0 1 8 0v11" />
+      <path className="hd-art-fine" d="M29 147h62m-50 7h38M46 68h28M30 111h60" />
     </>}
   </svg>
 }
