@@ -35,6 +35,48 @@ async function add(comment: string) {
 }
 
 describe('local review selection and export', () => {
+  it('keeps a fixed locator through wrapper and button-order changes', () => {
+    const { rerender } = render(<div><button data-review-id="settings-save">保存设置</button></div>)
+    const selector = describeTarget(screen.getByRole('button', { name: '保存设置' })).selector
+    expect(selector).toBe('[data-review-id="settings-save"]')
+    rerender(<section><p>新的说明</p><footer><button>取消</button><span><button data-review-id="settings-save">保存设置</button></span></footer></section>)
+    expect(document.querySelectorAll(selector)).toHaveLength(1)
+    expect(document.querySelector(selector)).toBe(screen.getByRole('button', { name: '保存设置' }))
+    expect(describeTarget(screen.getByRole('button', { name: '保存设置' })).selector).toBe(selector)
+  })
+  it('falls back to a unique structural path when a marker is duplicated', () => {
+    render(<div><button data-review-id="duplicate">甲</button><button data-review-id="duplicate">乙</button></div>)
+    const button = screen.getByRole('button', { name: '乙' })
+    const selector = describeTarget(button).selector
+    expect(selector).not.toBe('[data-review-id="duplicate"]')
+    expect(document.querySelectorAll(selector)).toHaveLength(1)
+    expect(document.querySelector(selector)).toBe(button)
+  })
+  it('captures the actual viewport scale without changing earlier snapshots', () => {
+    const viewport = { width: 310.5, height: 584.25, scale: 1.25 }
+    vi.stubGlobal('visualViewport', viewport)
+    const note = captureAnnotation(document.createElement('button'), DEMO_VERSION, 'test', 1)
+    viewport.scale = 2
+    expect(note.viewport.scale).toBe(1.25)
+    expect(note.viewport.visualWidth).toBe(310.5)
+    expect(note.viewport.visualHeight).toBe(584.25)
+    expect(exportAnnotations([note])).toContain('视口缩放：1.25×')
+  })
+  it.each([undefined, null])('reports unavailable scale and dimension fallback without VisualViewport (%s)', viewport => {
+    vi.stubGlobal('visualViewport', viewport)
+    const note = captureAnnotation(document.createElement('button'), DEMO_VERSION, 'test', 1)
+    expect(note.viewport.scale).toBeNull()
+    expect(note.viewport.visualWidth).toBe(innerWidth)
+    expect(note.viewport.visualHeight).toBe(innerHeight)
+    expect(exportAnnotations([note])).toContain('（回退为布局视口）')
+    expect(exportAnnotations([note])).toContain('视口缩放：不可用（浏览器未提供有效值）')
+  })
+  it('does not invent a scale when the interface provides an invalid value', () => {
+    vi.stubGlobal('visualViewport', { width: 390, height: 844, scale: 0 })
+    const note = captureAnnotation(document.createElement('button'), DEMO_VERSION, 'test', 1)
+    expect(note.viewport.scale).toBeNull()
+    expect(exportAnnotations([note])).not.toContain('回退为布局视口')
+  })
   it('snapshots a unique locator, modal title, URL, version and selection-time viewport', () => {
     const { container } = render(<div role="dialog" aria-labelledby="test-title"><h2 id="test-title">补课表单</h2><section><button>周二</button><button><span>周三</span></button></section></div>)
     const button = screen.getByRole('button', { name: '周三' })

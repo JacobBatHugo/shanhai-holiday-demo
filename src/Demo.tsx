@@ -25,8 +25,8 @@ type Scene = typeof SCENES[number][0]
 function Settings({ enabled, onSave, onClose }: { enabled: boolean; onSave: (value: boolean) => void; onClose: () => void }) {
   const [checked, setChecked] = useState(enabled)
   return <Modal open centered transitionName="" maskTransitionName="" width={560} onCancel={onClose} closable={{ 'aria-label': '关闭' }} rootClassName="qinglv folio hd-dialog hd-form-dialog hd-settings"
-    title={<FolioHeading title="课表设置" />} footer={<><Button onClick={onClose}>取消</Button><Button type="primary" onClick={() => onSave(checked)}>保存设置</Button></>}>
-    <section className="hd-setting-option"><Checkbox checked={checked} onChange={event => setChecked(event.target.checked)}>按节假日自动调整</Checkbox>
+    title={<FolioHeading title="课表设置" />} footer={<><Button data-review-id="settings-cancel" onClick={onClose}>取消</Button><Button data-review-id="settings-save" type="primary" onClick={() => onSave(checked)}>保存设置</Button></>}>
+    <section className="hd-setting-option" data-review-form="settings" data-review-saved-enabled={enabled} data-review-draft-enabled={checked}><Checkbox id="hd-settings-auto-adjust" checked={checked} onChange={event => setChecked(event.target.checked)}>按节假日自动调整</Checkbox>
       <p>{checked ? '放假日自动停课，调休补课由你设置。' : '按原课表显示，已设置的调整会保留。'}</p>
     </section>
   </Modal>
@@ -83,14 +83,14 @@ export default function Demo() {
   return <ConfigProvider locale={zhCN} theme={dark ? nightAntdTheme(theme) : theme}>
     <div className="qinglv hd-app">
       <header className="hd-nav"><a href="#hd-main" className="hd-brand"><svg viewBox="0 0 32 24" aria-hidden="true"><path d="M2 21 11 5l6 10 5-7 8 13H2ZM9 8l3 3 2-1M21 4l2-2" /></svg>山海课表</a><div><span className="hd-demo-label">交互预览</span><button className="hd-theme" aria-label={dark ? '切换日间模式' : '切换夜间模式'} onClick={() => { document.documentElement.dataset.theme = dark ? 'light' : 'dark'; setDark(!dark) }}>{dark ? '日间' : '夜间'}</button></div></header>
-      <div className="hd-demo-tools"><label htmlFor="hd-scene">预览场景</label><select id="hd-scene" value={scene} onChange={event => chooseScene(event.target.value as Scene)}>{SCENES.map(([value, label]) => <option value={value} key={value}>{label}</option>)}</select><button onClick={() => setGallery(true)}>节日卡片</button><button onClick={() => chooseScene(scene)}>重置示例</button><ReviewMode context={`${SCENES.find(([value]) => value === scene)![1]}；第 ${week} 周；${dark ? '夜间' : '日间'}；自动调整${state.enabled ? '开启' : '关闭'}`} /><span>虚构课表 · 刷新重置</span></div>
+      <div className="hd-demo-tools"><label htmlFor="hd-scene">预览场景</label><select id="hd-scene" value={scene} onChange={event => chooseScene(event.target.value as Scene)}>{SCENES.map(([value, label]) => <option value={value} key={value}>{label}</option>)}</select><button onClick={() => setGallery(true)}>节日卡片</button><button onClick={() => chooseScene(scene)}>重置示例</button><ReviewMode context={`${SCENES.find(([value]) => value === scene)![1]}；第 ${week} 周；${dark ? '夜间' : '日间'}；自动调整${state.enabled ? '开启' : '关闭'}（已保存）`} /><span>虚构课表 · 刷新重置</span></div>
       <main id="hd-main" className="hd-main">
         <div className={headingStyles.breadcrumb}><span>我的课表</span><span>/</span><span>学期课表</span></div>
         <section className={headingStyles.heading} aria-label="学期信息"><VoyageLandscape week={week} total={TOTAL_WEEKS} currentWeek={5} /><div className={headingStyles.copy}><h1>大学 · 大三 · 上学期</h1><p>2026—2027 学年<i>·</i>20 周<i>·</i>开始 08/31</p></div><span className={headingStyles.milestone}>航程<b>{String(week).padStart(2, '0')}</b><small>/ 20 周</small></span></section>
         <div className="hd-feedback-slot">
           {feedback && !settings && !restoreDate && !detail && !gallery && !makeupOpen && <Feedback notice={feedback} onDismiss={dismissFeedback} onUndo={() => undoFeedback(feedback)} />}
         </div>
-        <div className="hd-toolbar"><WeekRuler week={week} total={TOTAL_WEEKS} currentWeek={5} dateRange={`${dates[0].slice(5).replace('-', '/')} — ${dates.at(-1)!.slice(5).replace('-', '/')}`} onChange={value => { setWeek(value); setFeedback(null) }} /><div className="hd-toolbar-right"><span className="hd-enabled" data-enabled={state.enabled}>{state.enabled ? '已按节假日调整' : '原课表'}</span><Button ref={settingsButton} onClick={() => setSettings(true)}>课表设置</Button></div></div>
+        <div className="hd-toolbar"><WeekRuler week={week} total={TOTAL_WEEKS} currentWeek={5} dateRange={`${dates[0].slice(5).replace('-', '/')} — ${dates.at(-1)!.slice(5).replace('-', '/')}`} onChange={value => { setWeek(value); setFeedback(null) }} /><div className="hd-toolbar-right"><span className="hd-enabled" data-enabled={state.enabled}>{state.enabled ? '已按节假日调整' : '原课表'}</span><Button data-review-id="settings-open" ref={settingsButton} onClick={() => setSettings(true)}>课表设置</Button></div></div>
         {missingYears.length > 0 && <div className="hd-data-notice" role="status">{missingYears.join('、')} 年节假日数据暂不可用，相关日期按原课表显示。</div>}
         {stale && <div className="hd-data-notice" role="status">年历暂时无法更新，继续使用已有的节假日安排。</div>}
         <div className="hd-week-summary"><span>本周 {totalCourses} 个课程时段{daysOff > 0 ? ` · ${daysOff} 天放假` : ''}</span>{dates.length > 5 && <span>本周含调休，临时展开周末</span>}</div>
@@ -102,7 +102,7 @@ export default function Demo() {
             </div>)}
             {PERIODS.map(([start, end], i) => <div key={start} className={`hd-axis ${i >= 4 ? 'hd-afternoon' : ''}`} style={{ gridColumn: 1, gridRow: i + 2 }}><b>{'一二三四五六七八'[i]}</b><span>{start}<br />{end}</span></div>)}
             {dates.flatMap((date, dayIndex) => PERIODS.map((_, p) => <div className={`hd-cell ${p >= 4 ? 'hd-afternoon' : ''}`} aria-hidden="true" key={`${date}-${p}`} style={{ gridColumn: dayIndex + 2, gridRow: p + 2 }} />))}
-            {dates.map((date, i) => resolved[i].status === 'holiday' ? <HolidayCard data-date-action={date} key={date} name={resolved[i].holiday!.name} aria-label={`${fullDate(date)}，${resolved[i].holiday!.name}，恢复上课`} style={{ gridColumn: i + 2, gridRow: '2 / 10' }} onClick={() => { setLastRestore(date); setRestoreDate(date) }} /> : resolved[i].courses.map(course => <button className="hd-course" key={course.id} style={{ gridColumn: i + 2, gridRow: `${course.start + 1} / ${course.end + 2}` }} aria-label={`${fullDate(date)} ${course.name} 第${course.start}至${course.end}节`} onClick={() => setDetail({ course, source: resolved[i].sourceDate })}><strong>{course.name}</strong><span>{course.teacher}</span><span>{course.room}</span><small>{resolved[i].status === 'makeup' ? '调休补课' : course.cadence}</small></button>))}
+            {dates.map((date, i) => resolved[i].status === 'holiday' ? <HolidayCard data-date-action={date} key={date} name={resolved[i].holiday!.name} aria-label={`${fullDate(date)}，${resolved[i].holiday!.name}，恢复上课`} style={{ gridColumn: i + 2, gridRow: '2 / 10' }} onClick={() => { setLastRestore(date); setRestoreDate(date) }} /> : resolved[i].courses.map(course => <button className="hd-course" data-review-id={`course-${date}-${course.id}`} key={course.id} style={{ gridColumn: i + 2, gridRow: `${course.start + 1} / ${course.end + 2}` }} aria-label={`${fullDate(date)} ${course.name} 第${course.start}至${course.end}节`} onClick={() => setDetail({ course, source: resolved[i].sourceDate })}><strong>{course.name}</strong><span>{course.teacher}</span><span>{course.room}</span><small>{resolved[i].status === 'makeup' ? '调休补课' : course.cadence}</small></button>))}
             {dates.map((date, i) => {
               if (resolved[i].status !== 'pending') return null
               const slot = makeupEntrySlot(resolved[i].courses)
@@ -116,9 +116,9 @@ export default function Demo() {
       <Modal open={restoreDate !== null} centered transitionName="" maskTransitionName="" width={440} rootClassName="qinglv hd-dialog hd-restore-dialog" title="恢复上课？" footer={null} onCancel={() => setRestoreDate(null)} focusTriggerAfterClose={false} afterClose={() => focusDate(lastRestore)} afterOpenChange={visible => { if (visible) restoreChoice.current?.focus() }}>
         <p className="hd-restore-description">按原课表恢复所选范围内的课程。</p>
         <p className="hd-holiday-context">{holiday.name}</p>
-        <div className="hd-restore-choices"><button ref={restoreChoice} onClick={() => { change(restoreHoliday(state, lastRestore, 'day'), `${shortDate(lastRestore)}已恢复上课`, false); setRestoreDate(null) }}><strong>仅恢复当天</strong><span>{fullDate(lastRestore)}</span><i aria-hidden="true">↗</i></button>
-          <button onClick={() => { change(restoreHoliday(state, lastRestore, 'event'), `${holiday.name}本次假期已恢复上课`, false); setRestoreDate(null) }}><strong>恢复本次假期</strong><span>{shortDate(holiday.dates[0])}—{shortDate(holiday.dates.at(-1)!)} · {holiday.dates.length} 天</span><i aria-hidden="true">↗</i></button>
-          <button className="hd-cancel" onClick={() => setRestoreDate(null)}>取消</button>
+        <div className="hd-restore-choices"><button data-review-id="restore-day" ref={restoreChoice} onClick={() => { change(restoreHoliday(state, lastRestore, 'day'), `${shortDate(lastRestore)}已恢复上课`, false); setRestoreDate(null) }}><strong>仅恢复当天</strong><span>{fullDate(lastRestore)}</span><i aria-hidden="true">↗</i></button>
+          <button data-review-id="restore-holiday" onClick={() => { change(restoreHoliday(state, lastRestore, 'event'), `${holiday.name}本次假期已恢复上课`, false); setRestoreDate(null) }}><strong>恢复本次假期</strong><span>{shortDate(holiday.dates[0])}—{shortDate(holiday.dates.at(-1)!)} · {holiday.dates.length} 天</span><i aria-hidden="true">↗</i></button>
+          <button data-review-id="restore-cancel" className="hd-cancel" onClick={() => setRestoreDate(null)}>取消</button>
         </div>
       </Modal>
       {makeupDate && <MakeupSheet key={makeupSession} date={makeupDate} state={state} open={makeupOpen} onClose={() => setMakeupOpen(false)} afterClose={() => focusDate(makeupDate)}

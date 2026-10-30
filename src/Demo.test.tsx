@@ -3,6 +3,7 @@ import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-libra
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 import { ConfigProvider } from 'antd'
 import Demo from './Demo'
+import { captureAnnotation, exportAnnotations } from './review'
 
 beforeAll(() => {
   window.matchMedia = vi.fn().mockImplementation(query => ({ matches: false, media: query, onchange: null, addListener() {}, removeListener() {}, addEventListener() {}, removeEventListener() {}, dispatchEvent() { return true } }))
@@ -12,6 +13,38 @@ afterEach(() => { cleanup(); vi.useRealTimers() })
 const renderDemo = () => render(<ConfigProvider theme={{ token: { motion: false } }}><Demo /></ConfigProvider>)
 
 describe('revised holiday preview', () => {
+  it('snapshots saved and unsaved settings separately with a stable save target across reopening', async () => {
+    renderDemo()
+    fireEvent.click(screen.getByRole('button', { name: '课表设置' }))
+    const capture = (id: number) => captureAnnotation(screen.getByRole('button', { name: '保存设置' }), 'test', 'test', id)
+    const initial = capture(1)
+    expect(initial.target.selector).toBe('[data-review-id="settings-save"]')
+    expect(initial.settingsState).toEqual({ savedEnabled: false, draftEnabled: false })
+    fireEvent.click(screen.getByRole('checkbox'))
+    const edited = capture(2)
+    expect(edited.settingsState).toEqual({ savedEnabled: false, draftEnabled: true })
+    expect(edited.target.selector).toBe(initial.target.selector)
+    expect(document.querySelectorAll(initial.target.selector)).toHaveLength(1)
+    fireEvent.click(screen.getByRole('button', { name: '关闭' }))
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
+    fireEvent.click(screen.getByRole('button', { name: '课表设置' }))
+    const reopened = capture(3)
+    expect(reopened.target.selector).toBe(initial.target.selector)
+    expect(reopened.settingsState).toEqual(initial.settingsState)
+    expect(edited.settingsState).toEqual({ savedEnabled: false, draftEnabled: true })
+    const exported = exportAnnotations([initial, edited, reopened])
+    expect(exported).toContain('设置已保存：按节假日自动调整=关闭')
+    expect(exported).toContain('当前表单：按节假日自动调整=开启（有未保存更改）')
+    expect(exported).toContain('当前表单：按节假日自动调整=关闭（与已保存一致）')
+    fireEvent.click(screen.getByRole('checkbox'))
+    fireEvent.click(screen.getByRole('button', { name: '保存设置' }))
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
+    fireEvent.click(screen.getByRole('button', { name: '课表设置' }))
+    const saved = capture(4)
+    expect(saved.settingsState).toEqual({ savedEnabled: true, draftEnabled: true })
+    fireEvent.click(screen.getByRole('checkbox'))
+    expect(capture(5).settingsState).toEqual({ savedEnabled: true, draftEnabled: false })
+  })
   it('annotates inside settings without toggling or closing the form, then resumes normal interaction', async () => {
     renderDemo()
     fireEvent.click(screen.getByRole('button', { name: '验收模式' }))

@@ -75,16 +75,16 @@ export default function MakeupSheet({ date, state, open, onSave, onRemove, onClo
     onCancel={onClose} afterClose={afterClose} afterOpenChange={visible => { if (visible) heading.current?.focus() }}
     footer={<div className="hd-sheet-footer">
       <div className="hd-save-summary">{confirmReplace ? '确认替换当天课程' : existing && !changed ? '已保存' : courses.length ? `${courses.length} 个时段` : '尚未选择来源'}</div>
-      <div className="hd-footer-actions">{existing ? <button className="hd-text-action" onClick={onRemove}>撤销补课</button> : <Button onClick={onClose}>取消</Button>}<Button type="primary" onClick={save} disabled={!!existing && !changed}>{confirmReplace ? '确认替换' : '保存补课'}</Button></div>
+      <div className="hd-footer-actions">{existing ? <button data-review-id="makeup-remove" className="hd-text-action" onClick={onRemove}>撤销补课</button> : <Button data-review-id="makeup-cancel" onClick={onClose}>取消</Button>}<Button data-review-id="makeup-save" type="primary" onClick={save} disabled={!!existing && !changed}>{confirmReplace ? '确认替换' : '保存补课'}</Button></div>
     </div>}>
     <div className="hd-target-summary"><span>补课日期</span><strong>{shortDate(date)}<small>{DAYS[weekdayOf(date) - 1]} · 第 {weekOf(date)} 周</small></strong></div>
     <section className="hd-source-section"><div className="hd-section-title"><h3>补哪天的课</h3></div>
       <div className="hd-segment" role="group" aria-label="补课来源方式">
-        <button aria-pressed={mode === 'weekday'} onClick={() => { edit(); setMode('weekday') }}>同周星期</button>
-        <button aria-pressed={mode === 'date'} onClick={() => { edit(); setMode('date') }}>指定日期</button>
+        <button data-review-id="makeup-source-weekday" aria-pressed={mode === 'weekday'} onClick={() => { edit(); setMode('weekday') }}>同周星期</button>
+        <button data-review-id="makeup-source-date" aria-pressed={mode === 'date'} onClick={() => { edit(); setMode('date') }}>指定日期</button>
       </div>
       <div className="hd-source-controls">{mode === 'weekday' ? <><p className="hd-field-note">{shortDate(sourceForWeekday(date, 1))}—{shortDate(sourceForWeekday(date, 7))}</p>
-        <div className="hd-weekdays" role="group" aria-label="选择补课星期">{DAYS.map((name, i) => <button key={name} aria-pressed={weekday === i + 1} disabled={weekdayOf(date) === i + 1}
+        <div className="hd-weekdays" role="group" aria-label="选择补课星期">{DAYS.map((name, i) => <button key={name} data-review-id={`makeup-weekday-${i + 1}`} aria-pressed={weekday === i + 1} disabled={weekdayOf(date) === i + 1}
           onClick={() => { edit(); setWeekday(i + 1) }}>{name}</button>)}</div></> : <div className="hd-date-field"><label htmlFor="hd-source-date">来源日期 · 本学期内</label><SourcePicker source={source} invalid={showError} onChange={value => { if (source !== value) edit(); setSource(value) }} /></div>}</div>
       <div className="hd-source-message">{showError && <p className="hd-error" id="hd-source-error" role="alert">{error}</p>}</div>
     </section>
