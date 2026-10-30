@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import type { CSSProperties } from 'react'
 import { Button, Checkbox, ConfigProvider, Modal } from 'antd'
 import zhCN from 'antd/es/locale/zh_CN'
@@ -11,6 +11,8 @@ import FolioHeading from './shared/components/folio/FolioHeading'
 import MakeupSheet, { CourseList } from './MakeupSheet'
 import HolidayCard, { HolidayFace } from './HolidayCard'
 import useDialogViewport from './useDialogViewport'
+import Feedback from './Feedback'
+import type { Notice } from './Feedback'
 import { DAYS, HOLIDAYS, PERIODS, TOTAL_WEEKS, fullDate, holidayAt, initialState, makeupEntrySlot, removeMakeup, resolveDay, restoreHoliday, saveMakeup, shortDate, visibleDays, weekDates } from './model'
 import type { Course, State } from './model'
 
@@ -48,7 +50,8 @@ export default function Demo() {
   const [makeupOpen, setMakeupOpen] = useState(false)
   const [makeupSession, setMakeupSession] = useState(0)
   const [detail, setDetail] = useState<{ course: Course; source?: string } | null>(null)
-  const [feedback, setFeedback] = useState<{ message: string; previous?: State } | null>(null)
+  const [feedback, setFeedback] = useState<Notice | null>(null)
+  const dismissFeedback = useCallback((notice: Notice) => setFeedback(current => current === notice ? null : current), [])
   const grid = useRef<HTMLDivElement>(null)
   const settingsButton = useRef<HTMLButtonElement>(null)
   const restoreChoice = useRef<HTMLButtonElement>(null)
@@ -59,7 +62,13 @@ export default function Demo() {
   const stale = state.enabled && dates.some(date => state.years[date.slice(0, 4)] === 'stale')
   const totalCourses = resolved.reduce((sum, day) => sum + day.courses.length, 0)
   const daysOff = resolved.filter(day => day.status === 'holiday').length
-  function change(next: State, message: string, undo = true) { setFeedback({ message, previous: undo ? state : undefined }); setState(next) }
+  function change(next: State, message: string, undo = true) { setFeedback({ message, previous: undo ? state : undefined, date: makeupOpen ? makeupDate ?? undefined : undefined }); setState(next) }
+  function undoFeedback(notice: Notice) {
+    if (notice.previous) setState(notice.previous)
+    setFeedback(null)
+    if (notice.date) focusDate(notice.date)
+    else requestAnimationFrame(() => settingsButton.current?.focus())
+  }
   function focusDate(date: string) { requestAnimationFrame(() => (document.querySelector<HTMLElement>(`[data-date-action="${date}"]`) ?? document.querySelector<HTMLElement>(`[data-date-heading="${date}"]`))?.focus()) }
   function openMakeup(date: string) { setFeedback(null); setMakeupDate(date); setMakeupSession(value => value + 1); setMakeupOpen(true) }
   function chooseScene(next: Scene) {
@@ -82,6 +91,9 @@ export default function Demo() {
       <main id="hd-main" className="hd-main">
         <div className={headingStyles.breadcrumb}><span>我的课表</span><span>/</span><span>学期课表</span></div>
         <section className={headingStyles.heading} aria-label="学期信息"><VoyageLandscape week={week} total={TOTAL_WEEKS} currentWeek={5} /><div className={headingStyles.copy}><h1>大学 · 大三 · 上学期</h1><p>2026—2027 学年<i>·</i>20 周<i>·</i>开始 08/31</p></div><span className={headingStyles.milestone}>航程<b>{String(week).padStart(2, '0')}</b><small>/ 20 周</small></span></section>
+        <div className="hd-feedback-slot">
+          {feedback && !settings && !restoreDate && !detail && !gallery && !makeupOpen && <Feedback notice={feedback} onDismiss={dismissFeedback} onUndo={() => undoFeedback(feedback)} />}
+        </div>
         <div className="hd-toolbar"><WeekRuler week={week} total={TOTAL_WEEKS} currentWeek={5} dateRange={`${dates[0].slice(5).replace('-', '/')} — ${dates.at(-1)!.slice(5).replace('-', '/')}`} onChange={value => { setWeek(value); setFeedback(null) }} /><div className="hd-toolbar-right"><span className="hd-enabled" data-enabled={state.enabled}>{state.enabled ? '已按节假日调整' : '原课表'}</span><Button ref={settingsButton} onClick={() => setSettings(true)}>课表设置</Button></div></div>
         {missingYears.length > 0 && <div className="hd-data-notice" role="status">{missingYears.join('、')} 年节假日数据暂不可用，相关日期按原课表显示。</div>}
         {stale && <div className="hd-data-notice" role="status">年历暂时无法更新，继续使用已有的节假日安排。</div>}
@@ -104,7 +116,6 @@ export default function Demo() {
         </div>
         <footer className="hd-page-footer"><span>日程有序，所学皆有所得。</span><details><summary>示例工具</summary><button onClick={() => { setState({ ...state, sourceRoomUpdated: !state.sourceRoomUpdated }); setFeedback(null) }}>工程力学教室：{state.sourceRoomUpdated ? 'A302' : 'A205'} · 点击变更</button><p>用于检查补课是否同步来源排课。</p></details></footer>
       </main>
-      {feedback && !settings && !restoreDate && !detail && !gallery && !makeupOpen && <div className="hd-feedback" role="status"><span>{feedback.message}</span>{feedback.previous && <button onClick={() => { setState(feedback.previous!); setFeedback(null) }}>撤销</button>}<button aria-label="关闭提示" onClick={() => setFeedback(null)}>×</button></div>}
       {settings && <Settings enabled={state.enabled} onClose={() => { setSettings(false); requestAnimationFrame(() => settingsButton.current?.focus()) }} onSave={value => { change({ ...state, enabled: value }, value ? '已开启节假日自动调整' : '已暂停调整，设置仍保留'); setSettings(false); requestAnimationFrame(() => settingsButton.current?.focus()) }} />}
       <Modal open={restoreDate !== null} centered transitionName="" maskTransitionName="" width={440} rootClassName="qinglv hd-dialog hd-restore-dialog" title="恢复上课？" footer={null} onCancel={() => setRestoreDate(null)} focusTriggerAfterClose={false} afterClose={() => focusDate(lastRestore)} afterOpenChange={visible => { if (visible) restoreChoice.current?.focus() }}>
         <p className="hd-restore-description">按原课表恢复所选范围内的课程。</p>

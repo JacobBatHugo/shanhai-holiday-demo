@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 import { ConfigProvider } from 'antd'
 import Demo from './Demo'
@@ -8,10 +8,30 @@ beforeAll(() => {
   window.matchMedia = vi.fn().mockImplementation(query => ({ matches: false, media: query, onchange: null, addListener() {}, removeListener() {}, addEventListener() {}, removeEventListener() {}, dispatchEvent() { return true } }))
   Element.prototype.scrollIntoView = vi.fn()
 })
-afterEach(cleanup)
+afterEach(() => { cleanup(); vi.useRealTimers() })
 const renderDemo = () => render(<ConfigProvider theme={{ token: { motion: false } }}><Demo /></ConfigProvider>)
 
 describe('revised holiday preview', () => {
+  it('returns focus to the restored makeup action after undo replaces its trigger', async () => {
+    renderDemo()
+    fireEvent.change(screen.getByLabelText('预览场景'), { target: { value: 'makeup' } })
+    fireEvent.click(screen.getByRole('button', { name: '设置补课' }))
+    fireEvent.click(screen.getByRole('button', { name: '周二' }))
+    fireEvent.click(screen.getByRole('button', { name: '保存补课' }))
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull())
+    fireEvent.click(screen.getByRole('button', { name: '撤销' }))
+    await waitFor(() => expect(document.activeElement).toBe(screen.getByRole('button', { name: '设置补课' })))
+  })
+  it('automatically clears restoration feedback after five seconds', () => {
+    vi.useFakeTimers()
+    renderDemo()
+    fireEvent.change(screen.getByLabelText('预览场景'), { target: { value: 'holiday' } })
+    fireEvent.click(screen.getByRole('button', { name: '10月1日 周四，国庆节，恢复上课' }))
+    fireEvent.click(screen.getByRole('button', { name: /仅恢复当天/ }))
+    expect(screen.getByText('10月1日已恢复上课')).toBeTruthy()
+    act(() => vi.advanceTimersByTime(5000))
+    expect(screen.queryByText('10月1日已恢复上课')).toBeNull()
+  })
   it('restores one day without offering a holiday reapply or restoration undo', async () => {
     renderDemo()
     fireEvent.change(screen.getByLabelText('预览场景'), { target: { value: 'holiday' } })
