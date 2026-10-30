@@ -70,10 +70,10 @@ button.hd-holiday:hover { border-color: color-mix(in srgb, var(--holiday-ink) 48
 .hd-page-footer details { text-align: right; }
 .hd-page-footer summary { cursor: pointer; min-height: 32px; }
 .hd-page-footer button { padding: 8px; min-height: 44px; color: var(--color-primary); background: transparent; border: 1px solid var(--color-border); font-size: 12px; }
-.hd-feedback { position: fixed; z-index: 1001; bottom: 24px; left: 50%; transform: translateX(-50%); max-width: calc(100% - 32px); width: max-content; display: flex; align-items: center; gap: 18px; padding: 3px 12px 3px 20px; background: var(--color-bg-elevated); border: 1px solid var(--color-border-control); box-shadow: var(--shadow-popup); font-size: 13px; }
+.hd-feedback { position: fixed; z-index: 1001; top: calc(var(--hd-visible-top, 0px) + max(24px, env(safe-area-inset-top), calc(var(--hd-visible-height, 100dvh) * .2))); left: 50%; transform: translateX(-50%); max-width: calc(100% - 32px); width: max-content; display: flex; align-items: center; gap: 18px; padding: 3px 12px 3px 20px; background: var(--color-bg-elevated); border: 1px solid var(--color-border-control); box-shadow: var(--shadow-popup); font-size: 13px; }
 .hd-feedback > span { line-height: 1.6; }
 .hd-feedback button { flex: 0 0 auto; min-width: 44px; height: 44px; border: 0; background: transparent; color: var(--color-primary); }
-.hd-feedback button:last-child { min-width: 28px; font-size: 20px; }
+.hd-feedback button:last-child { font-size: 20px; }
 .hd-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 
 /* Dialogs use the same paper, ink, and flat controls as the accepted folio. */
@@ -182,14 +182,11 @@ button.hd-holiday:hover { border-color: color-mix(in srgb, var(--holiday-ink) 48
 .hd-discard > div { display: flex; justify-content: flex-end; gap: 12px; }
 .hd-discard .ant-btn { min-height: 44px; border-radius: 2px; }
 
-/* Forms and content overlays stay centred; only the restore prompt sits higher. */
-:root { --hd-dialog-gap: clamp(20px, calc(var(--hd-visible-height, 100dvh) * .08), 80px); }
+/* All dialogs stay centred; operation-result feedback sits in the upper screen. */
 .hd-dialog.hd-dialog .ant-modal-wrap { display: flex; align-items: center; justify-content: center; top: var(--hd-visible-top, 0px); bottom: auto; height: var(--hd-visible-height, 100dvh); padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left)); overflow: hidden; }
-.hd-restore-dialog.hd-dialog .ant-modal-wrap { align-items: flex-start; padding-top: max(var(--hd-dialog-gap), env(safe-area-inset-top)); }
 .hd-dialog.hd-dialog .ant-modal-wrap::before { display: none; }
 .hd-dialog.hd-dialog .ant-modal { top: 0; margin: 0; padding: 0; max-width: 100%; }
 .hd-dialog.hd-dialog .ant-modal-content { display: flex; flex-direction: column; max-height: calc(var(--hd-visible-height, 100dvh) - 32px); }
-.hd-restore-dialog.hd-dialog .ant-modal-content { max-height: calc(var(--hd-visible-height, 100dvh) - var(--hd-dialog-gap) - 24px); }
 .hd-dialog.hd-dialog .ant-modal-header, .hd-dialog.hd-dialog .ant-modal-footer { flex-shrink: 0; }
 .hd-dialog.hd-dialog .ant-modal-title { padding-right: 28px; }
 .hd-dialog.hd-dialog .ant-modal-body { min-height: 0; overflow: auto; overscroll-behavior: contain; scrollbar-width: thin; }
@@ -229,7 +226,7 @@ button.hd-holiday:hover { border-color: color-mix(in srgb, var(--holiday-ink) 48
   .hd-course strong { font-size: 16px; }
   .hd-holiday { margin: 10px 8px; }
   .hd-page-footer { font-size: 10px; gap: 10px; }
-  .hd-feedback { gap: 10px; bottom: 14px; padding-left: 14px; font-size: 12px; }
+  .hd-feedback { gap: 10px; padding-left: 14px; font-size: 12px; }
   .hd-dialog.hd-dialog .ant-modal { max-width: 100%; margin: 0; }
   .hd-restore-dialog .ant-modal-content, .hd-detail-dialog .ant-modal-content { padding: 24px 22px 18px; }
   .hd-restore-dialog .ant-modal-title, .hd-detail-dialog .ant-modal-title { font-size: 25px; }
