@@ -1,0 +1,22 @@
+{
+  "generator": "built-in image_gen.imagegen",
+  "model": "not exposed by tool",
+  "date": "2026-10-30",
+  "files": [
+    {
+      "path": "artwork/camellia-original.png",
+      "bytes": 1613967,
+      "sha256": "f8ca0f6de2bb84b334e98516813f2774af381dbb0150fbae1ed1db082af30865"
+    },
+    {
+      "path": "artwork/camellia.prompt.txt",
+      "bytes": 2307,
+      "sha256": "b7abbbb07a93bbe663057a08ab844f21492e6395a22427c2c6290922d1653bfe"
+    },
+    {
+      "path": "assets/camellia.webp",
+      "bytes": 87756,
+      "sha256": "b3ba0cb404256be249dff0b82b59afbd33d182150335b2b35a1aca880c2174f2"
+    }
+  ]
+}

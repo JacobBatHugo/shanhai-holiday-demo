@@ -118,11 +118,7 @@ button.hd-holiday:hover { border-color: color-mix(in srgb, var(--holiday-ink) 48
 .hd-sheet-title:focus { outline: none; }
 .hd-sheet-eyebrow { display: block; color: var(--sheet-muted); font: 10px/1.5 var(--font-family-heading); letter-spacing: 3px; margin-bottom: 7px; }
 .hd-sheet-title h2 { margin: 0; color: var(--sheet-ink); font: 26px/1.4 var(--font-family-heading); letter-spacing: 2px; }
-.hd-camellia { position: absolute; width: 145px; height: 105px; right: 26px; top: -20px; pointer-events: none; z-index: -1; opacity: .62; }
-.hd-camellia-leaves { fill: color-mix(in srgb, var(--color-primary) 12%, transparent); stroke: color-mix(in srgb, var(--color-primary) 65%, transparent); stroke-width: 1; }
-.hd-camellia-veins { opacity: .55; stroke-width: .7; }
-.hd-camellia-flower { fill: color-mix(in srgb, var(--color-error) 7%, var(--sheet)); stroke: color-mix(in srgb, var(--color-error) 62%, transparent); stroke-width: .9; }
-.hd-camellia-heart { fill: var(--color-warning); }
+.hd-camellia { position: absolute; width: 145px; height: 105px; object-fit: contain; right: 26px; top: -20px; pointer-events: none; z-index: -1; opacity: .62; }
 :root[data-theme="dark"] .hd-camellia { opacity: .68; }
 .hd-sheet.folio .ant-modal-body { display: flex; flex-direction: column; flex: 1; padding: 0 26px 16px !important; min-height: 0; overflow: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-gutter: stable; }
 .hd-sheet.folio .ant-modal-footer { margin: 0 !important; padding: 12px 26px max(16px, env(safe-area-inset-bottom)) !important; border-top: 1px solid var(--sheet-line); background: var(--sheet); flex-shrink: 0; }
